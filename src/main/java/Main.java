@@ -21,28 +21,28 @@ public class Main {
 
         // CSV - JSON PARSER
 
-        //создаем паттерн
+        //СЃРѕР·РґР°РµРј РїР°С‚С‚РµСЂРЅ
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
-        //имя файла CSV, из которого будут считываться данные
+        //РёРјСЏ С„Р°Р№Р»Р° CSV, РёР· РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґСѓС‚ СЃС‡РёС‚С‹РІР°С‚СЊСЃСЏ РґР°РЅРЅС‹Рµ
         String fileName = "data.csv";
-        //достаем данные из CSV файла и парсим в объект типа List
+        //РґРѕСЃС‚Р°РµРј РґР°РЅРЅС‹Рµ РёР· CSV С„Р°Р№Р»Р° Рё РїР°СЂСЃРёРј РІ РѕР±СЉРµРєС‚ С‚РёРїР° List
         List<Employee> list = parseCSV(columnMapping, fileName);
-        // данные из списка сохраняем в String
+        // РґР°РЅРЅС‹Рµ РёР· СЃРїРёСЃРєР° СЃРѕС…СЂР°РЅСЏРµРј РІ String
         String json = listToJson(list);
-        //записываем в файл типа json
+        //Р·Р°РїРёСЃС‹РІР°РµРј РІ С„Р°Р№Р» С‚РёРїР° json
         writeString(json, "newdata.json");
 
-        //  XML - JSON парсер
+        //  XML - JSON РїР°СЂСЃРµСЂ
 
-        //создаем список сотрудников из файла XML
+        //СЃРѕР·РґР°РµРј СЃРїРёСЃРѕРє СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РёР· С„Р°Р№Р»Р° XML
         List<Employee> xmlList = parseXML("data.xml");
-        // преобразуем полученный список в String
+        // РїСЂРµРѕР±СЂР°Р·СѓРµРј РїРѕР»СѓС‡РµРЅРЅС‹Р№ СЃРїРёСЃРѕРє РІ String
         String xmlString = listToJson(xmlList);
-        //сохраняем в файл Json
+        //СЃРѕС…СЂР°РЅСЏРµРј РІ С„Р°Р№Р» Json
         writeString(xmlString, "data2.json");
     }
 
-    //функция для считывания данных из CSV файла и сохранения их в объект типа List
+    //С„СѓРЅРєС†РёСЏ РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ РґР°РЅРЅС‹С… РёР· CSV С„Р°Р№Р»Р° Рё СЃРѕС…СЂР°РЅРµРЅРёСЏ РёС… РІ РѕР±СЉРµРєС‚ С‚РёРїР° List
     public static List<Employee> parseCSV(String[] columnMapping, String filename) {
         List<Employee> employees = null;
         try (CSVReader csvReader = new CSVReader(new FileReader(filename))) {
@@ -60,7 +60,7 @@ public class Main {
         return employees;
     }
 
-    // функция для сохранения в String в формате json
+    // С„СѓРЅРєС†РёСЏ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РІ String РІ С„РѕСЂРјР°С‚Рµ json
     public static String listToJson(List<Employee> employees) {
         Type listType = new TypeToken<List<Employee>>() {
         }.getType();
@@ -70,7 +70,7 @@ public class Main {
 
     }
 
-    // функция для записи String json в файл типа json
+    // С„СѓРЅРєС†РёСЏ РґР»СЏ Р·Р°РїРёСЃРё String json РІ С„Р°Р№Р» С‚РёРїР° json
     public static void writeString(String json, String filename) {
         try (FileWriter file = new FileWriter(filename)) {
             file.write(json);
@@ -80,7 +80,7 @@ public class Main {
         }
     }
 
-    // функция для получения списка сотрудников из XML документа
+    // С„СѓРЅРєС†РёСЏ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРїРёСЃРєР° СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РёР· XML РґРѕРєСѓРјРµРЅС‚Р°
     public static List<Employee> parseXML(String file) {
         List<Employee> employees = new ArrayList<Employee>();
         Employee employee = null;
