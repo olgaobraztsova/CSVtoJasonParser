@@ -2,16 +2,17 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,17 @@ public class Main {
         String xmlString = listToJson(xmlList);
         //сохраняем в файл Json
         writeString(xmlString, "data2.json");
+
+        // преобразование объектов JSON в классы Java
+        String readFromJson = readToString("newdata.json");
+        List<Employee> listOfEmployeesFromJson = jsonToList(readFromJson);
+
+        //выводим в консоль элементы полученного списка
+        for (Employee employee : listOfEmployeesFromJson) {
+            System.out.println(employee);
+        }
+
+
     }
 
     //функция для считывания данных из CSV файла и сохранения их в объект типа List
@@ -67,7 +79,6 @@ public class Main {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         return gson.toJson(employees, listType);
-
     }
 
     // функция для записи String json в файл типа json
@@ -117,4 +128,49 @@ public class Main {
         return employees;
     }
 
+    //содержимое из файла JSON кладем в String
+    public static String readToString(String filepath){
+        StringBuilder textFromJson = new StringBuilder("");
+
+        try (BufferedReader buffer = new BufferedReader(new FileReader(filepath))){
+            String line = null;
+
+            while ((line = buffer.readLine()) != null) {
+                textFromJson.append(line);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return textFromJson.toString();
+    }
+
+    // преобразуем JSON-строку в классы Java
+    public static List<Employee> jsonToList(String json) {
+
+        // получаем из строчки json массив JSONArray
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(json);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        //создаем экземпляр Gson
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
+        //создаем список для объектов Employee
+        List<Employee> employees = new ArrayList<>();
+
+        // из массива jsonArray получаем экземпляры класса Employee и кладем их в список
+        for (Object emp : jsonArray) {
+            Employee employee = gson.fromJson(emp.toString(), Employee.class);
+            employees.add(employee);
+        }
+
+        return employees;
+    }
 }
